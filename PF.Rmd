@@ -35,24 +35,31 @@ table(dbf$Total_members_employed)
 table(dbf$Household_Head_Age)
 summary(dbf$Education_Expenditure)
 ```
-
+#Usamos el test de Lilliefors, el cual es un test basado en el test de normalidad de Kolmorogov-Smirnov 
 ```{r}
+#Test de Normalizado y analisis parametrico en Total de Miembros de la Familia con Empleo
 lillie.test(dbf$Total_members_employed)#Kolmorogov-Smirnov 
-ggpubr::ggqqplot(dbf$Total_members_employed)
+#ggpubr::ggqqplot(dbf$Total_members_employed)
 #Cv=Ds/|X|
 cv1 <-sd(dbf$Total_members_employed)/mean(dbf$Total_members_employed)
 cv1
+hist(dbf$Total_members_employed)
 ```
 
 ```{r}
-lillie.test(dbf$Household_Head_Age)
+#Test de Normalizado y analisis parametrico en Total de Miembros de Edad del Jefe de Casa
+lillie.test(dbf$Household_Head_Age)#Kolmorogov-Smirnov
+ggpubr::ggqqplot(dbf$Household_Head_Age)
 #Cv=Ds/|X|
 cv2 <-sd(dbf$Household_Head_Age)/mean(dbf$Household_Head_Age)
 cv2
+hist(dbf$Household_Head_Age)
 ```
 
 ```{r}
-lillie.test(dbf$Education_Expenditure)
+#Test de Normalizado y analisis parametrico en Inversión en Educación 
+lillie.test(dbf$Education_Expenditure)#Kolmorogov-Smirnov
+#Arreglo logaritmico - Revisar 
 logEE <- log(dbf$Education_Expenditure)
 ggpubr::ggqqplot(dbf$Education_Expenditure)
 ggpubr::ggqqplot(logEE)
@@ -62,3 +69,4 @@ cv3
 hist(dbf$Education_Expenditure)
 hist(logEE)
 ```
+#No se puede usar boxplots
