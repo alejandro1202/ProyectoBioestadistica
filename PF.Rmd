@@ -1,0 +1,27 @@
+---
+title: "Proyecto Final"
+author: Felipe Arguelles, Franza Estevez, Alejandro Iza, Lily Lopez, Mia Townsend,
+  Edir Vidal
+date: "18/12/2021"
+output: html_document
+---
+
+```{r setup,include=FALSE}
+library(ggplot2)
+library(ggpubr)
+library(dplyr)
+library(tidyverse)
+library(PTXQC) 
+```
+
+```{r}
+db<-read.csv("Bioestadistica.csv")
+db = db[complete.cases(db),]
+```
+
+
+```{r}
+table((db$Education_Expenditure))
+```
+
+Note that the `` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
