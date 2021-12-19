@@ -7,22 +7,58 @@ output: html_document
 ---
 
 ```{r setup,include=FALSE}
+library(tidyverse)
 library(ggplot2)
 library(ggpubr)
 library(dplyr)
-library(tidyverse)
 library(PTXQC) 
+library(nortest)
 ```
 
 ```{r}
 db<-read.csv("Bioestadistica.csv")
-db = db[complete.cases(db),] #Limpieza de datos mediante eliminación de espacios vacios
+db = db[complete.cases(db),]
+```
+
+```{r}
+#Limpieza de datos mediante eliminación de espacios vacíos
+boxplot(db$Education_Expenditure)
 ```
 # No se encontrar observaciones vacios y por lo tanto no se elimino ninguna. 
 
 ```{r}
-dbf <- filter(db, Household_Head_Age>=18) #Se filtran las personas menores a 18 años
+dbf <- filter(db, Household_Head_Age>=18)
 ```
 ```{r}
-table(dbf$Household_Head_Sex)
+#Variables resumidas para realizar un test de Normalidad
+table(dbf$Total_members_employed)
+table(dbf$Household_Head_Age)
+summary(dbf$Education_Expenditure)
+```
+
+```{r}
+lillie.test(dbf$Total_members_employed)#Kolmorogov-Smirnov 
+ggpubr::ggqqplot(dbf$Total_members_employed)
+#Cv=Ds/|X|
+cv1 <-sd(dbf$Total_members_employed)/mean(dbf$Total_members_employed)
+cv1
+```
+
+```{r}
+lillie.test(dbf$Household_Head_Age)
+#Cv=Ds/|X|
+cv2 <-sd(dbf$Household_Head_Age)/mean(dbf$Household_Head_Age)
+cv2
+```
+
+```{r}
+lillie.test(dbf$Education_Expenditure)
+logEE <- log(dbf$Education_Expenditure)
+ggpubr::ggqqplot(dbf$Education_Expenditure)
+ggpubr::ggqqplot(logEE)
+#Cv=Ds/|X|
+cv3 <-sd(dbf$Education_Expenditure)/mean(dbf$Education_Expenditure)
+cv3
+hist(dbf$Education_Expenditure)
+hist(logEE)
 ```
