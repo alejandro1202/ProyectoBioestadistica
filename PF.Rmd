@@ -15,13 +15,14 @@ library(PTXQC)
 ```
 
 ```{r}
-#Limpieza de datos mediante eliminación de espacios vacios
-boxplot(db$Education_Expenditure)
+db<-read.csv("Bioestadistica.csv")
+db = db[complete.cases(db),] #Limpieza de datos mediante eliminación de espacios vacios
 ```
 # No se encontrar observaciones vacios y por lo tanto no se elimino ninguna. 
 
 ```{r}
-dbf <- filter(db, Household_Head_Age>=18)
+dbf <- filter(db, Household_Head_Age>=18) #Se filtran las personas menores a 18 años
 ```
-
-Note that the `` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+table(dbf$Household_Head_Sex)
+```
