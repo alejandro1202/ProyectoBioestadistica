@@ -29,6 +29,11 @@ boxplot(db$Education_Expenditure)
 ```{r}
 dbf <- filter(db, Household_Head_Age>=18)
 ```
+
+```{r}
+data <- dbf %>% select(Education_Expenditure,Main_Source_of_Income,Household_Head_Age,Household_Head_Sex,Total_members_employed) 
+```
+
 ```{r}
 #Variables resumidas para realizar un test de Normalidad
 table(dbf$Total_members_employed)
@@ -68,5 +73,13 @@ cv3 <-sd(dbf$Education_Expenditure)/mean(dbf$Education_Expenditure)
 cv3
 hist(dbf$Education_Expenditure)
 hist(logEE)
+```
+
+```{r}
+#Relación entre las variables
+#La libreria GGally permite observar los diagramas de dispersión, valores de correlación y la distribución de las variables en un solo gráfico
+ggpairs(dbf, lower = list(continuous="smooth"),diag=list(continuous="bar"),axisLabels="none")
+
+
 ```
 #No se puede usar boxplots
