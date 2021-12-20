@@ -14,6 +14,7 @@ output: html_document
 #install.packages("GGally")
 #install.packages("PTXQC")
 #install.packages("nortest")
+#install.packages("gridExtra")
 ```
 
 ```{r setup,include=FALSE}
@@ -108,8 +109,8 @@ hist(dbfsin0$Household_Head_Age)
 ```
 ###Modelos de primer orden para personas  que gastan más de 0 en educación
 ```{r}
-modelo_1.1 <- lm(Education_Expenditure ~ Household_Head_Age, dbfsin0 = dbfsin0 )
-modelo_1.2 <- lm(Education_Expenditure ~ Total_members_employed, dbfsin0 = dbfsin0)
+modelo_1.1 <- lm(Education_Expenditure ~ Household_Head_Age, data = dbfsin0 )
+modelo_1.2 <- lm(Education_Expenditure ~ Total_members_employed, data = dbfsin0)
 
 
 # Observamos
