@@ -14,17 +14,25 @@ output: html_document
 #install.packages("GGally")
 #install.packages("PTXQC")
 #install.packages("nortest")
+#install.packages("gridExtra")
+install.packages("Imtest")
+install.packages("jtools")
+install.packages("ggstance")
+
 ```
 
 ```{r setup,include=FALSE}
 library(ggpubr)
 library(dplyr)
 library(nortest)
-library(tidyverse) #tratamiento de datos
-library(GGally) #análisis de relacion entre variables
-library(ggplot2) #graficos
-library(gridExtra)#validacion de condiciones para la regresion lineal
-library(AICcmodavg) # Método Forward
+library(tidyverse) 
+library(GGally)
+library(ggplot2) 
+library(gridExtra)
+library(AICcmodavg) 
+library(lmtest)
+library(jtools)
+library(ggstance)
 ```
 
 ```{r}
@@ -102,98 +110,61 @@ boxplot(dbfsin0$Education_Expenditure~dbfsin0$Household_Head_Sex, log="y")
 boxplot(dbfcon0$Household_Head_Age~dbfcon0$Household_Head_Sex)
 
 ```
-
 ```{r}
 hist(dbfcon0$Household_Head_Age)
 hist(dbfsin0$Household_Head_Age)
-
-hist(dbfcon0$Total_members_employed)
-hist(dbfsin0$Total_members_employed)
-
-barplot(prop.table(table(dbfcon0$Main_Source_of_Income)))
-barplot(prop.table(table(dbfsin0$Main_Source_of_Income)))
-
-barplot(prop.table(table(dbfcon0$Household_Head_Sex)))
-barplot(prop.table(table(dbfsin0$Household_Head_Sex)))
-
-plot(y=dbfsin0$Household_Head_Age, x=dbfsin0$Education_Expenditure)
-
-ggplot(dbfsin0, aes(x=Education_Expenditure, y=Household_Head_Age)) +
-  geom_point() +
-  geom_smooth(method=glm , color="red", se=FALSE)
-ggplot(dbfsin0, aes(x=log(Education_Expenditure), y=Household_Head_Age)) +
-  geom_point() +
-  geom_smooth(method=glm , color="red", se=FALSE)
 ```
 
 ##Modelo nulo 
 ```{r}
-modelonulo <-lm(Education_Expenditure ~ 1, data  = dbf )
-
-# Observamos
+modelonulo <-lm(Education_Expenditure ~ 1, data  = dbfsin0)
 summary(modelonulo)
 
-#Definir la lista de modelos
+#Para listar los modelos
 models0 <- list(modelonulo)
 
-#Especificar los nombres del modelo
+#Para definir el nombres del modelo
 mod.names1 <- c("Modelonulo")
 
 #Calcular el AIC de cada modelo
 aictab(cand.set = models0, modnames = mod.names1)
 
-# A simple vista se ve el modelo 1.1 es el que tiene el menor AIC por lo que peso (wt) entraría primero al modelo
 ```
-###Modelos de primer orden 
+##Modelos de primer orden 
 ```{r}
-modelo_1.1 <-lm(Education_Expenditure ~ Household_Head_Age, data  = dbf )
-modelo_1.2 <-lm(Education_Expenditure ~ Total_members_employed, data =  dbf)
-
-# Observamos
+modelo_1.1 <-lm(Education_Expenditure ~ Household_Head_Age, data  = dbfsin0 )
+modelo_1.2 <-lm(Education_Expenditure~ Total_members_employed, data =  dbfsin0)
 summary(modelo_1.1)
 summary(modelo_1.2)
 
-
-
-#Definir la lista de modelos
+#Para listar los modelos
 models1 <- list(modelo_1.1, modelo_1.2)
 
-#Especificar los nombres del modelo
-mod.names1 <- c('Gastoedu y edad', 'Gastoedu y miembros ')
+#Para definir los nombres de los modelos
+mod.names1 <- c('Modelo 1.1', 'Modelo 1.2 ')
 
-#Calcular el AIC de cada modelo
+#Para calcularel AIC de cada modelo
 aictab(cand.set = models1, modnames = mod.names1)
 
 ```
-
-###Modelos de segundo orden 
+##Modelos de segundo orden 
 ```{r}
-modelo_2.1 <- lm( Education_Expenditure ~ Total_members_employed + Household_Head_Age, data=dbf )
-
-
-# Observamos
+modelo_2.1 <- lm( Education_Expenditure ~ Household_Head_Age + Total_members_employed , data=dbfsin0 )
 summary(modelo_2.1 )
-
-#Definir la lista de modelos
 models2 <- list(modelo_2.1)
-
-#Especificar los nombres del modelo
-mod.names2 <- c('Gastomiembrosedad')
-
-#Calcular el AIC de cada modelo
+#Especificar el nombre del modelo
+mod.names2 <- c('Modelo 2')
+#Para calcular el AIC de cada modelo
 aictab(cand.set = models2, modnames = mod.names2)
-
-
-```
 #poisson
 ```{r}
-ModelopNulo= glm(Education_Expenditure ~ 1, family = poisson, data =dbf)
+ModelopNulo= glm(Education_Expenditure ~ 1, family = poisson, data =dbfsin0)
 ModelopNulo
-Modelop1.1=glm(Education_Expenditure~Household_Head_Age,family = poisson, data=dbf)
+Modelop1.1=glm(Education_Expenditure~Household_Head_Age,family = poisson, data=dbfsin0)
 Modelop1.1
-Modelop1.2=glm(Education_Expenditure~Total_members_employed,family = poisson, data=dbf)
+Modelop1.2=glm(Education_Expenditure~Total_members_employed,family = poisson, data=dbfsin0)
 Modelop1.2
-Modelop2=glm(Education_Expenditure~Total_members_employed + Household_Head_Age ,family = poisson, data=dbf)
+Modelop2=glm(Education_Expenditure~Total_members_employed + Household_Head_Age ,family = poisson, data=dbfsin0)
 Modelop2
 
 CalculoPoissonAIC <- list(ModelopNulo, Modelop1.1,Modelop1.2,Modelop2)
@@ -202,8 +173,22 @@ summary(Modelop1.1)
 summary(Modelop1.2)
 summary(Modelop2)
 models2 <- list(ModelopNulo, Modelop1.1,Modelop1.2,Modelop2)
-#Especificar los nombres del modelo
+#Sirve para definir los nombres de los modelos
 NamesPoissonAIC <- c('Nulo', 'Modelo 1.1',"Modelo 1.2","Modelo 2")
-#Calcular el AIC de cada modelo
-aictab(cand.set = CalculoPoissonAIC, modnames = NamesPoissonAIC) # Podemos visualizar que el Modelo 2 es el que tiene el AIC menor, en conscuencia, es el mejor modelo.
+#Para poder alcular el AIC de cada modelo
+aictab(cand.set = CalculoPoissonAIC, modnames = NamesPoissonAIC) 
 ```
+#Analisis de postregresión 
+```{r}
+AER::dispersiontest(Modelop2,trafo=1)
+```
+#Heterocedasticidad
+```{r}
+bptest(Modelop2)# si el p-value es menor a 0.05 existe heterocedasticidad
+
+```
+#Predicción del modelo
+```{r}
+plot_summs(Modelop2, scale = TRUE, exp = TRUE)
+```
+
