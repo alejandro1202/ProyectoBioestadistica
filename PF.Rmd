@@ -91,4 +91,18 @@ ggpairs(dbf, lower = list(continuous="smooth"),diag=list(continuous="bar"),axisL
 
 
 ```
-#No se puede usar boxplots
+```{r}
+dbfsin0 <- filter(dbf, Education_Expenditure!=0)
+dbfcon0 <- filter(dbf, Education_Expenditure==0)
+boxplot(dbf$Education_Expenditure+1~dbf$Main_Source_of_Income, log="y")
+boxplot(dbfsin0$Education_Expenditure~dbfsin0$Main_Source_of_Income, log="y")
+
+boxplot(dbfsin0$Education_Expenditure~dbfsin0$Household_Head_Sex, log="y")
+
+boxplot(dbfcon0$Household_Head_Age~dbfcon0$Household_Head_Sex)
+
+```
+```{r}
+hist(dbfcon0$Household_Head_Age)
+hist(dbfsin0$Household_Head_Age)
+```
