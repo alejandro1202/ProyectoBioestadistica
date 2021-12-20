@@ -149,17 +149,23 @@ aictab(cand.set = models2, modnames = mod.names2)
 ```
 #poisson
 ```{r}
-ModeloNulo= glm(Education_Expenditure ~ 1, family = poisson, data =dbf)
-ModeloNulo
-Modelo1=glm(Education_Expenditure~Household_Head_Age,family = poisson, data=dbf)
-Modelo1
-CalculoPoissonAIC <- list(ModeloNulo, Modelo1)
-summary(Modelo1)
-models2 <- list(ModeloNulo, Modelo1)
-#Especificar los nombres del modelo
-NamesPoissonAIC <- c('Nulo', 'Modelo1')
+ModelopNulo= glm(Education_Expenditure ~ 1, family = poisson, data =dbf)
+ModelopNulo
+Modelop1.1=glm(Education_Expenditure~Household_Head_Age,family = poisson, data=dbf)
+Modelop1.1
+Modelop1.2=glm(Education_Expenditure~Total_members_employed,family = poisson, data=dbf)
+Modelop1.2
+Modelop2=glm(Education_Expenditure~Total_members_employed + Household_Head_Age ,family = poisson, data=dbf)
+Modelop2
 
+CalculoPoissonAIC <- list(ModelopNulo, Modelop1.1,Modelop1.2,Modelop2)
+summary(ModelopNulo)
+summary(Modelop1.1)
+summary(Modelop1.2)
+summary(Modelop2)
+models2 <- list(ModelopNulo, Modelop1.1,Modelop1.2,Modelop2)
+#Especificar los nombres del modelo
+NamesPoissonAIC <- c('Nulo', 'Modelo 1.1',"Modelo 1.2","Modelo 2")
 #Calcular el AIC de cada modelo
 aictab(cand.set = CalculoPoissonAIC, modnames = NamesPoissonAIC) # Podemos visualizar que el Modelo 2 es el que tiene el AIC menor, en conscuencia, es el mejor modelo.
-
 ```
