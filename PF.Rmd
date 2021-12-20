@@ -28,10 +28,7 @@ boxplot(db$Education_Expenditure)
 
 ```{r}
 dbf <- filter(db, Household_Head_Age>=18)
-```
-
-```{r}
-data <- dbf %>% select(Education_Expenditure,Main_Source_of_Income,Household_Head_Age,Household_Head_Sex,Total_members_employed) 
+dbf <- dbf %>% select(Education_Expenditure,Main_Source_of_Income,Household_Head_Age,Household_Head_Sex,Total_members_employed) 
 ```
 
 ```{r}
