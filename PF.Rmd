@@ -106,6 +106,24 @@ boxplot(dbfcon0$Household_Head_Age~dbfcon0$Household_Head_Sex)
 hist(dbfcon0$Household_Head_Age)
 hist(dbfsin0$Household_Head_Age)
 ```
+##Modelo nulo 
+```{r}
+modelonulo <-lm(Education_Expenditure ~ 1, data  = dbf )
+
+# Observamos
+summary(modelonulo)
+
+#Definir la lista de modelos
+models0 <- list(modelonulo)
+
+#Especificar los nombres del modelo
+mod.names1 <- c("Modelonulo")
+
+#Calcular el AIC de cada modelo
+aictab(cand.set = models0, modnames = mod.names1)
+
+# A simple vista se ve el modelo 1.1 es el que tiene el menor AIC por lo que peso (wt) entraría primero al modelo
+```
 ###Modelos de primer orden 
 ```{r}
 modelo_1.1 <-lm(Education_Expenditure ~ Household_Head_Age, data  = dbf )
