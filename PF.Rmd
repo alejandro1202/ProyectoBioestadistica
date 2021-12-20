@@ -6,6 +6,16 @@ date: "18/12/2021"
 output: html_document
 ---
 
+```{r}
+#install.packages("tidyverse")
+#install.packages("ggplot2")
+#install.packages("ggpubr")
+#install.packages("dplyr")
+#install.packages("GGally")
+#install.packages("PTXQC")
+#install.packages("nortest")
+```
+
 ```{r setup,include=FALSE}
 library(ggpubr)
 library(dplyr)
