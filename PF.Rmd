@@ -102,10 +102,30 @@ boxplot(dbfsin0$Education_Expenditure~dbfsin0$Household_Head_Sex, log="y")
 boxplot(dbfcon0$Household_Head_Age~dbfcon0$Household_Head_Sex)
 
 ```
+
 ```{r}
 hist(dbfcon0$Household_Head_Age)
 hist(dbfsin0$Household_Head_Age)
+
+hist(dbfcon0$Total_members_employed)
+hist(dbfsin0$Total_members_employed)
+
+barplot(prop.table(table(dbfcon0$Main_Source_of_Income)))
+barplot(prop.table(table(dbfsin0$Main_Source_of_Income)))
+
+barplot(prop.table(table(dbfcon0$Household_Head_Sex)))
+barplot(prop.table(table(dbfsin0$Household_Head_Sex)))
+
+plot(y=dbfsin0$Household_Head_Age, x=dbfsin0$Education_Expenditure)
+
+ggplot(dbfsin0, aes(x=Education_Expenditure, y=Household_Head_Age)) +
+  geom_point() +
+  geom_smooth(method=glm , color="red", se=FALSE)
+ggplot(dbfsin0, aes(x=log(Education_Expenditure), y=Household_Head_Age)) +
+  geom_point() +
+  geom_smooth(method=glm , color="red", se=FALSE)
 ```
+
 ##Modelo nulo 
 ```{r}
 modelonulo <-lm(Education_Expenditure ~ 1, data  = dbf )
